@@ -18,12 +18,20 @@ class ToursApp extends React.Component {
     fetchTours()
   }
 
+  handleRemoveTour = async (id) => {
+    const tours = await this.state.tours.filter((tour) => {
+      return tour.id !== id
+    })
+    this.setState(() => ({ tours }))
+  }
+
   render() {
     return (
       <div>
         <Header />
         <Tours
           tours={this.state.tours}
+          handleRemoveTour={this.handleRemoveTour}
         />
 
       </div>
@@ -42,10 +50,12 @@ const Tours = (props) => (
     return (
       <Tour
         key={tour.id}
+        id={tour.id}
         img={tour.image}
         name={tour.name}
         price={tour.price}
         description={tour.description}
+        handleRemoveTour={props.handleRemoveTour}
       />
     )
   })
@@ -53,15 +63,33 @@ const Tours = (props) => (
 
 const Tour = (props) => {
 
+
   return (
     <div>
       <img src={props.img} />
       <h3>{props.name}</h3>
       <p>{props.price}</p>
       <p>{props.description}</p>
-      <button>Not Interested</button>
+      <RemoveTour
+        handleRemoveTour={props.handleRemoveTour}
+        id={props.id}
+      />
     </div>
   )
+}
+
+class RemoveTour extends React.Component {
+
+  handleRemoveTour = () => {
+    console.log('removed')
+    this.props.handleRemoveTour(this.props.id)
+  }
+
+  render() {
+    return (
+      <button onClick={this.handleRemoveTour}>Remove Tour</button>
+    )
+  }
 }
 
 ReactDOM.render(
