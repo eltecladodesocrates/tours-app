@@ -1,17 +1,71 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+
+const url = 'https://course-api.com/react-tours-project'
+
+class ToursApp extends React.Component {
+
+  state = {
+    tours: []
+  }
+
+  componentDidMount() {
+    const fetchTours = async () => {
+      const response = await fetch(url)
+      const tours = await response.json()
+      this.setState(() => ({ tours }))
+    }
+    fetchTours()
+  }
+
+  render() {
+    return (
+      <div>
+        <Header />
+        <Tours
+          tours={this.state.tours}
+        />
+
+      </div>
+    )
+  }
+}
+
+const Header = () => (
+  <div>
+    <h1>Tours App</h1>
+  </div>
+)
+
+const Tours = (props) => (
+  props.tours.map((tour) => {
+    return (
+      <Tour
+        key={tour.id}
+        img={tour.image}
+        name={tour.name}
+        price={tour.price}
+        description={tour.description}
+      />
+    )
+  })
+)
+
+const Tour = (props) => {
+
+  return (
+    <div>
+      <img src={props.img} />
+      <h3>{props.name}</h3>
+      <p>{props.price}</p>
+      <p>{props.description}</p>
+      <button>Not Interested</button>
+    </div>
+  )
+}
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <ToursApp />,
   document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
