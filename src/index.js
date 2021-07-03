@@ -54,7 +54,7 @@ const Tours = (props) => (
         img={tour.image}
         name={tour.name}
         price={tour.price}
-        description={tour.description}
+        info={tour.info}
         handleRemoveTour={props.handleRemoveTour}
       />
     )
@@ -69,13 +69,37 @@ const Tour = (props) => {
       <img src={props.img} />
       <h3>{props.name}</h3>
       <p>{props.price}</p>
-      <p>{props.description}</p>
+
+      <Info
+        info={props.info}
+      />
       <RemoveTour
         handleRemoveTour={props.handleRemoveTour}
         id={props.id}
       />
     </div>
   )
+}
+
+class Info extends React.Component {
+
+  state = {
+    visibility: true
+  }
+
+
+  handleShowInfo = () => {
+    this.setState((prevState) => ({ visibility: !prevState.visibility }))
+  }
+
+  render() {
+    return (
+      <div>
+        {this.state.visibility ? <p>{this.props.info.substr(0, 50)}... <button onClick={this.handleShowInfo}>Show more</button></p> : <p>{this.props.info} <button onClick={this.handleShowInfo}>Show less</button></p>}
+
+      </div>
+    )
+  }
 }
 
 class RemoveTour extends React.Component {
